@@ -1,91 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<!-- LearnWow member pass (do not remove): gets the member pass from nusparklearnwow.com and shows the Join screen when a visitor runs out of searches -->
-<script>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Learn...Wow! Search Engine — Code</title>
+<style>body{margin:0;background:#123166;color:#fbf6ea;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}.w{max-width:980px;margin:0 auto;padding:24px 16px}h1{margin:0 0 6px}.lead{color:#d0dcf3;margin:0 0 20px}section{background:#183d7c;border:1px solid #4470b8;border-radius:14px;padding:16px;margin:0 0 18px}.h{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}h2{margin:0;font-size:19px;color:#f0c466}.h p{margin:4px 0 10px;color:#d0dcf3;font-size:14.5px}button{background:#F2B33D;color:#123166;border:0;border-radius:999px;padding:10px 18px;font-weight:800;cursor:pointer;white-space:nowrap}textarea{width:100%;height:260px;box-sizing:border-box;background:#0e2550;color:#fbf6ea;border:1px solid #4470b8;border-radius:10px;padding:10px;font:12.5px/1.45 ui-monospace,Menlo,Consolas,monospace}</style></head>
+<body><div class="w"><h1>Learn...Wow! Search Engine</h1><p class="lead">New repo: <b>learnwow-search</b> under NuSpark-Wow. All 4 code files are new (the cartoon Mr. Paul is built into index.html, so there is no image file to upload). Nothing in your other tools changes.</p><section><div class="h"><div><h2>1. index.html</h2><p>Upload to the main folder of the repo.</p></div><button onclick="cp('c0',this)">Copy code</button></div><textarea id="c0" readonly>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;!-- LearnWow member pass (do not remove): gets the member pass from nusparklearnwow.com and shows the Join screen when a visitor runs out of searches --&gt;
+&lt;script&gt;
 (function () {
   if (window.__lwgate) return; window.__lwgate = 1;
-  var JOIN = "https://nusparklearnwow.com/join/", LOGIN = "https://nusparklearnwow.com/membership-login/";
-  var LW = { pass: null, vid: "" };
-  try { LW.vid = localStorage.getItem("lw_vid") || ""; if (!LW.vid) { LW.vid = (Date.now().toString(36) + Math.random().toString(36).slice(2, 12)); localStorage.setItem("lw_vid", LW.vid); } }
-  catch (e) { LW.vid = "s" + Math.random().toString(36).slice(2, 12); }
+  var JOIN = &quot;https://nusparklearnwow.com/join/&quot;, LOGIN = &quot;https://nusparklearnwow.com/membership-login/&quot;;
+  var LW = { pass: null, vid: &quot;&quot; };
+  try { LW.vid = localStorage.getItem(&quot;lw_vid&quot;) || &quot;&quot;; if (!LW.vid) { LW.vid = (Date.now().toString(36) + Math.random().toString(36).slice(2, 12)); localStorage.setItem(&quot;lw_vid&quot;, LW.vid); } }
+  catch (e) { LW.vid = &quot;s&quot; + Math.random().toString(36).slice(2, 12); }
   var okHost = /(^|\.)(nusparklearnwow|nusparkpublishing|nusparkmarketing)\.com$/;
   var ready = new Promise(function (done) {
     if (window.parent === window) return done();
     var fin = false, end = function () { if (!fin) { fin = true; done(); } };
-    window.addEventListener("message", function (e) {
-      var d = e.data; if (!d || d.type !== "lw-pass") return;
+    window.addEventListener(&quot;message&quot;, function (e) {
+      var d = e.data; if (!d || d.type !== &quot;lw-pass&quot;) return;
       try { if (!okHost.test(new URL(e.origin).hostname)) return; } catch (x) { return; }
       LW.pass = d.pass || null;
-      if (d.vid && /^[a-z0-9]{6,40}$/i.test(d.vid)) LW.vid = "w" + d.vid;
+      if (d.vid &amp;&amp; /^[a-z0-9]{6,40}$/i.test(d.vid)) LW.vid = &quot;w&quot; + d.vid;
       end();
     });
-    try { window.parent.postMessage({ type: "lw-pass-request" }, "*"); } catch (x) {}
+    try { window.parent.postMessage({ type: &quot;lw-pass-request&quot; }, &quot;*&quot;); } catch (x) {}
     setTimeout(end, 1500);
   });
 
   var shown = false;
   function show(j) {
     if (shown) return; shown = true;
-    var reason = j && j.lwgate;
-    var title = reason === "budget" ? "You've reached this month's limit"
-      : reason === "search" ? "Want to keep exploring?"
-      : reason === "preview" ? "This is a members feature" : "You've used your tries";
-    var text = reason === "budget"
-      ? "Your membership has hit its monthly usage limit. It resets at the start of next month. Questions? Contact us at nusparklearnwow.com/support."
-      : reason === "search"
-      ? "You've used today's searches. Become a member for unlimited searches and all the Learn...Wow! experiences. 7-day trial, then $29.99/month. Cancel anytime."
-      : "Join LearnWow to unlock all 20 experiences. 7-day trial, then $29.99/month. Cancel anytime.";
-    var box = document.createElement("div");
-    box.setAttribute("style", "position:fixed;inset:0;z-index:2147483647;background:rgba(10,25,60,.72);display:flex;align-items:center;justify-content:center;padding:20px;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif");
-    var btn = "display:inline-block;margin:6px;padding:14px 28px;border-radius:40px;font-weight:800;font-size:17px;text-decoration:none;";
+    var reason = j &amp;&amp; j.lwgate;
+    var title = reason === &quot;budget&quot; ? &quot;You&#x27;ve reached this month&#x27;s limit&quot;
+      : reason === &quot;search&quot; ? &quot;Want to keep exploring?&quot;
+      : reason === &quot;preview&quot; ? &quot;This is a members feature&quot; : &quot;You&#x27;ve used your tries&quot;;
+    var text = reason === &quot;budget&quot;
+      ? &quot;Your membership has hit its monthly usage limit. It resets at the start of next month. Questions? Contact us at nusparklearnwow.com/support.&quot;
+      : reason === &quot;search&quot;
+      ? &quot;You&#x27;ve used today&#x27;s searches. Become a member for unlimited searches and all the Learn...Wow! experiences. 7-day trial, then $29.99/month. Cancel anytime.&quot;
+      : &quot;Join LearnWow to unlock all 20 experiences. 7-day trial, then $29.99/month. Cancel anytime.&quot;;
+    var box = document.createElement(&quot;div&quot;);
+    box.setAttribute(&quot;style&quot;, &quot;position:fixed;inset:0;z-index:2147483647;background:rgba(10,25,60,.72);display:flex;align-items:center;justify-content:center;padding:20px;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif&quot;);
+    var btn = &quot;display:inline-block;margin:6px;padding:14px 28px;border-radius:40px;font-weight:800;font-size:17px;text-decoration:none;&quot;;
     box.innerHTML =
-      '<div style="background:#123166;color:#fff;max-width:440px;width:100%;border-radius:22px;padding:30px 26px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35)">' +
-      '<div style="font-size:40px;line-height:1;color:#F2B33D">&#10022;</div>' +
-      '<div style="font-size:24px;font-weight:800;margin:10px 0 8px">' + title + '</div>' +
-      '<div style="font-size:16px;line-height:1.5;opacity:.92;margin-bottom:18px">' + text + '</div>' +
-      (reason === "budget" ? "" : '<a target="_top" href="' + JOIN + '" style="' + btn + 'background:#F2B33D;color:#123166">' + (reason === "search" ? "Become a Member" : "Join Now") + '</a>') +
-      '<a target="_top" href="' + LOGIN + '" style="' + btn + 'background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6)">Member Log In</a>' +
-      '<div><button type="button" style="margin-top:10px;background:none;border:0;color:#cfd8ef;font-size:14px;cursor:pointer;text-decoration:underline">Keep looking around</button></div>' +
-      "</div>";
-    box.querySelector("button").onclick = function () { box.remove(); shown = false; };
+      &#x27;&lt;div style=&quot;background:#123166;color:#fff;max-width:440px;width:100%;border-radius:22px;padding:30px 26px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35)&quot;&gt;&#x27; +
+      &#x27;&lt;div style=&quot;font-size:40px;line-height:1;color:#F2B33D&quot;&gt;&amp;#10022;&lt;/div&gt;&#x27; +
+      &#x27;&lt;div style=&quot;font-size:24px;font-weight:800;margin:10px 0 8px&quot;&gt;&#x27; + title + &#x27;&lt;/div&gt;&#x27; +
+      &#x27;&lt;div style=&quot;font-size:16px;line-height:1.5;opacity:.92;margin-bottom:18px&quot;&gt;&#x27; + text + &#x27;&lt;/div&gt;&#x27; +
+      (reason === &quot;budget&quot; ? &quot;&quot; : &#x27;&lt;a target=&quot;_top&quot; href=&quot;&#x27; + JOIN + &#x27;&quot; style=&quot;&#x27; + btn + &#x27;background:#F2B33D;color:#123166&quot;&gt;&#x27; + (reason === &quot;search&quot; ? &quot;Become a Member&quot; : &quot;Join Now&quot;) + &#x27;&lt;/a&gt;&#x27;) +
+      &#x27;&lt;a target=&quot;_top&quot; href=&quot;&#x27; + LOGIN + &#x27;&quot; style=&quot;&#x27; + btn + &#x27;background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6)&quot;&gt;Member Log In&lt;/a&gt;&#x27; +
+      &#x27;&lt;div&gt;&lt;button type=&quot;button&quot; style=&quot;margin-top:10px;background:none;border:0;color:#cfd8ef;font-size:14px;cursor:pointer;text-decoration:underline&quot;&gt;Keep looking around&lt;/button&gt;&lt;/div&gt;&#x27; +
+      &quot;&lt;/div&gt;&quot;;
+    box.querySelector(&quot;button&quot;).onclick = function () { box.remove(); shown = false; };
     (document.body || document.documentElement).appendChild(box);
   }
   window.__lwShow = show;
 
-  var of = window.fetch && window.fetch.bind(window);
+  var of = window.fetch &amp;&amp; window.fetch.bind(window);
   if (!of) return;
   window.fetch = function (input, init) {
-    var url = typeof input === "string" ? input : (input && input.url) || String(input || "");
+    var url = typeof input === &quot;string&quot; ? input : (input &amp;&amp; input.url) || String(input || &quot;&quot;);
     var u; try { u = new URL(url, location.href); } catch (e) { return of(input, init); }
-    if (u.origin !== location.origin || u.pathname.indexOf("/api/") !== 0) return of(input, init);
+    if (u.origin !== location.origin || u.pathname.indexOf(&quot;/api/&quot;) !== 0) return of(input, init);
     return ready.then(function () {
       var o = {}; if (init) for (var k in init) o[k] = init[k];
-      var hd = new Headers(o.headers || (typeof input !== "string" && input && input.headers) || undefined);
-      if (LW.pass) hd.set("x-lw-pass", LW.pass);
-      hd.set("x-lw-vid", LW.vid);
+      var hd = new Headers(o.headers || (typeof input !== &quot;string&quot; &amp;&amp; input &amp;&amp; input.headers) || undefined);
+      if (LW.pass) hd.set(&quot;x-lw-pass&quot;, LW.pass);
+      hd.set(&quot;x-lw-vid&quot;, LW.vid);
       o.headers = hd;
       return of(input, o);
     }).then(function (r) {
-      if (r.status === 402) r.clone().json().then(function (j) { if (j && j.lwgate) show(j); }).catch(function () {});
+      if (r.status === 402) r.clone().json().then(function (j) { if (j &amp;&amp; j.lwgate) show(j); }).catch(function () {});
       return r;
     });
   };
 })();
-</script>
+&lt;/script&gt;
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Learn...Wow! Search Engine</title>
-<meta name="description" content="Got a quick question? Ask the Learn...Wow! Search Engine. Get a quick answer, then explore the tools that go deeper.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;title&gt;Learn...Wow! Search Engine&lt;/title&gt;
+&lt;meta name=&quot;description&quot; content=&quot;Got a quick question? Ask the Learn...Wow! Search Engine. Get a quick answer, then explore the tools that go deeper.&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
 :root{
   --bg:#123166; --panel:#183d7c; --card:#1e4990; --line:#4470b8; --ink:#fbf6ea; --soft:#d0dcf3;
   --brass:#f0c466; --gold:#F2B33D; --paper:#fbf9f3; --paperink:#1f2a44; --muted:#5b6478;
-  --serif:'Fraunces',Georgia,serif;
+  --serif:&#x27;Fraunces&#x27;,Georgia,serif;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
@@ -171,258 +173,637 @@ h1{font-family:var(--serif);font-weight:600;font-size:clamp(25px,4.4vw,38px);lin
   .answer{padding:18px;font-size:16.5px}
   .own{flex-direction:column}.own input{flex:none;width:100%;height:46px}.own button{width:100%}
 }
-</style>
-</head>
-<body>
-<div class="wrap">
-  <div class="head">
-    <div class="eyebrow">Learn...Wow! Search</div>
-    <h1>Got a Quick Question? Ask the Learn...Wow! Search Engine</h1>
-    <p class="sub">Get a quick answer, then explore the tools that go deeper.</p>
-  </div>
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;wrap&quot;&gt;
+  &lt;div class=&quot;head&quot;&gt;
+    &lt;div class=&quot;eyebrow&quot;&gt;Learn...Wow! Search&lt;/div&gt;
+    &lt;h1&gt;Got a Quick Question? Ask the Learn...Wow! Search Engine&lt;/h1&gt;
+    &lt;p class=&quot;sub&quot;&gt;Get a quick answer, then explore the tools that go deeper.&lt;/p&gt;
+  &lt;/div&gt;
 
-  <div class="searchrow">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 380" class="paul" role="img" aria-label="Cartoon Mr. Paul with a magnifying glass">
-  <defs>
-    <linearGradient id="sSkin" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#f6d2bb"/>
-      <stop offset="1" stop-color="#eebc9f"/>
-    </linearGradient>
-    <linearGradient id="sCoat" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#e6ecf2"/>
-    </linearGradient>
-    <linearGradient id="sLens" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#d8dde0" stop-opacity=".45"/>
-      <stop offset="1" stop-color="#aeb6bc" stop-opacity=".3"/>
-    </linearGradient>
-    <linearGradient id="sGlens" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#e6f6ff"/>
-      <stop offset=".6" stop-color="#a9d8f2"/>
-      <stop offset="1" stop-color="#7fbfe3"/>
-    </linearGradient>
-      <radialGradient id="sGlass" cx=".4" cy=".35" r=".75">
-      <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
-      <stop offset=".55" stop-color="#cfe9fb" stop-opacity=".85"/>
-      <stop offset="1" stop-color="#8cc4ea" stop-opacity=".9"/>
-    </radialGradient>
-  </defs>
+  &lt;div class=&quot;searchrow&quot;&gt;
+  &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 450 380&quot; class=&quot;paul&quot; role=&quot;img&quot; aria-label=&quot;Cartoon Mr. Paul with a magnifying glass&quot;&gt;
+  &lt;defs&gt;
+    &lt;linearGradient id=&quot;sSkin&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;0&quot; y2=&quot;1&quot;&gt;
+      &lt;stop offset=&quot;0&quot; stop-color=&quot;#f6d2bb&quot;/&gt;
+      &lt;stop offset=&quot;1&quot; stop-color=&quot;#eebc9f&quot;/&gt;
+    &lt;/linearGradient&gt;
+    &lt;linearGradient id=&quot;sCoat&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;0&quot; y2=&quot;1&quot;&gt;
+      &lt;stop offset=&quot;0&quot; stop-color=&quot;#ffffff&quot;/&gt;
+      &lt;stop offset=&quot;1&quot; stop-color=&quot;#e6ecf2&quot;/&gt;
+    &lt;/linearGradient&gt;
+    &lt;linearGradient id=&quot;sLens&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;1&quot; y2=&quot;1&quot;&gt;
+      &lt;stop offset=&quot;0&quot; stop-color=&quot;#d8dde0&quot; stop-opacity=&quot;.45&quot;/&gt;
+      &lt;stop offset=&quot;1&quot; stop-color=&quot;#aeb6bc&quot; stop-opacity=&quot;.3&quot;/&gt;
+    &lt;/linearGradient&gt;
+    &lt;linearGradient id=&quot;sGlens&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;0&quot; y2=&quot;1&quot;&gt;
+      &lt;stop offset=&quot;0&quot; stop-color=&quot;#e6f6ff&quot;/&gt;
+      &lt;stop offset=&quot;.6&quot; stop-color=&quot;#a9d8f2&quot;/&gt;
+      &lt;stop offset=&quot;1&quot; stop-color=&quot;#7fbfe3&quot;/&gt;
+    &lt;/linearGradient&gt;
+      &lt;radialGradient id=&quot;sGlass&quot; cx=&quot;.4&quot; cy=&quot;.35&quot; r=&quot;.75&quot;&gt;
+      &lt;stop offset=&quot;0&quot; stop-color=&quot;#ffffff&quot; stop-opacity=&quot;.95&quot;/&gt;
+      &lt;stop offset=&quot;.55&quot; stop-color=&quot;#cfe9fb&quot; stop-opacity=&quot;.85&quot;/&gt;
+      &lt;stop offset=&quot;1&quot; stop-color=&quot;#8cc4ea&quot; stop-opacity=&quot;.9&quot;/&gt;
+    &lt;/radialGradient&gt;
+  &lt;/defs&gt;
 
-  <!-- black V-neck sweater over a light blue collared shirt -->
-  <path d="M40 380 C44 318 78 290 122 282 L160 300 L198 282 C242 290 276 318 280 380 Z" fill="#1d1f24" stroke="#0d0e11" stroke-width="3"/>
-  <path d="M122 282 L160 340 L198 282 L184 280 L160 318 L136 280 Z" fill="#a9c4e6"/>
-  <path d="M136 280 L160 300 L148 318 Z" fill="#c4d8f0" stroke="#86a4cc" stroke-width="2"/>
-  <path d="M184 280 L160 300 L172 318 Z" fill="#c4d8f0" stroke="#86a4cc" stroke-width="2"/>
-  <path d="M118 284 L160 346 L202 284" stroke="#34373f" stroke-width="5" fill="none" stroke-linejoin="round"/>
-  <path d="M70 340 C80 350 90 356 100 360" stroke="#2c2f36" stroke-width="2" fill="none" opacity=".7"/>
-  <path d="M250 340 C240 350 230 356 220 360" stroke="#2c2f36" stroke-width="2" fill="none" opacity=".7"/>
-  <!-- neck -->
-  <path d="M134 240 L136 290 Q160 304 184 290 L186 240 Z" fill="#e8b294"/>
+  &lt;!-- black V-neck sweater over a light blue collared shirt --&gt;
+  &lt;path d=&quot;M40 380 C44 318 78 290 122 282 L160 300 L198 282 C242 290 276 318 280 380 Z&quot; fill=&quot;#1d1f24&quot; stroke=&quot;#0d0e11&quot; stroke-width=&quot;3&quot;/&gt;
+  &lt;path d=&quot;M122 282 L160 340 L198 282 L184 280 L160 318 L136 280 Z&quot; fill=&quot;#a9c4e6&quot;/&gt;
+  &lt;path d=&quot;M136 280 L160 300 L148 318 Z&quot; fill=&quot;#c4d8f0&quot; stroke=&quot;#86a4cc&quot; stroke-width=&quot;2&quot;/&gt;
+  &lt;path d=&quot;M184 280 L160 300 L172 318 Z&quot; fill=&quot;#c4d8f0&quot; stroke=&quot;#86a4cc&quot; stroke-width=&quot;2&quot;/&gt;
+  &lt;path d=&quot;M118 284 L160 346 L202 284&quot; stroke=&quot;#34373f&quot; stroke-width=&quot;5&quot; fill=&quot;none&quot; stroke-linejoin=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M70 340 C80 350 90 356 100 360&quot; stroke=&quot;#2c2f36&quot; stroke-width=&quot;2&quot; fill=&quot;none&quot; opacity=&quot;.7&quot;/&gt;
+  &lt;path d=&quot;M250 340 C240 350 230 356 220 360&quot; stroke=&quot;#2c2f36&quot; stroke-width=&quot;2&quot; fill=&quot;none&quot; opacity=&quot;.7&quot;/&gt;
+  &lt;!-- neck --&gt;
+  &lt;path d=&quot;M134 240 L136 290 Q160 304 184 290 L186 240 Z&quot; fill=&quot;#e8b294&quot;/&gt;
 
-  <!-- side hair (behind head), soft and fluffy -->
-  <g fill="#dedad2">
-    <ellipse cx="82" cy="130" rx="14" ry="22"/><ellipse cx="78" cy="152" rx="18" ry="30"/><ellipse cx="76" cy="182" rx="14" ry="24"/><ellipse cx="88" cy="206" rx="12" ry="16"/>
-    <ellipse cx="238" cy="130" rx="14" ry="22"/><ellipse cx="242" cy="152" rx="18" ry="30"/><ellipse cx="244" cy="182" rx="14" ry="24"/><ellipse cx="232" cy="206" rx="12" ry="16"/>
-  </g>
-  <g stroke="#c2bdb3" stroke-width="1.8" fill="none" stroke-linecap="round">
-    <path d="M70 132 C64 150 64 170 70 190"/><path d="M78 140 C74 160 74 184 82 206"/><path d="M66 124 C62 118 60 112 61 106"/>
-    <path d="M250 132 C256 150 256 170 250 190"/><path d="M242 140 C246 160 246 184 238 206"/><path d="M254 124 C258 118 260 112 259 106"/>
-  </g>
+  &lt;!-- side hair (behind head), soft and fluffy --&gt;
+  &lt;g fill=&quot;#dedad2&quot;&gt;
+    &lt;ellipse cx=&quot;82&quot; cy=&quot;130&quot; rx=&quot;14&quot; ry=&quot;22&quot;/&gt;&lt;ellipse cx=&quot;78&quot; cy=&quot;152&quot; rx=&quot;18&quot; ry=&quot;30&quot;/&gt;&lt;ellipse cx=&quot;76&quot; cy=&quot;182&quot; rx=&quot;14&quot; ry=&quot;24&quot;/&gt;&lt;ellipse cx=&quot;88&quot; cy=&quot;206&quot; rx=&quot;12&quot; ry=&quot;16&quot;/&gt;
+    &lt;ellipse cx=&quot;238&quot; cy=&quot;130&quot; rx=&quot;14&quot; ry=&quot;22&quot;/&gt;&lt;ellipse cx=&quot;242&quot; cy=&quot;152&quot; rx=&quot;18&quot; ry=&quot;30&quot;/&gt;&lt;ellipse cx=&quot;244&quot; cy=&quot;182&quot; rx=&quot;14&quot; ry=&quot;24&quot;/&gt;&lt;ellipse cx=&quot;232&quot; cy=&quot;206&quot; rx=&quot;12&quot; ry=&quot;16&quot;/&gt;
+  &lt;/g&gt;
+  &lt;g stroke=&quot;#c2bdb3&quot; stroke-width=&quot;1.8&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot;&gt;
+    &lt;path d=&quot;M70 132 C64 150 64 170 70 190&quot;/&gt;&lt;path d=&quot;M78 140 C74 160 74 184 82 206&quot;/&gt;&lt;path d=&quot;M66 124 C62 118 60 112 61 106&quot;/&gt;
+    &lt;path d=&quot;M250 132 C256 150 256 170 250 190&quot;/&gt;&lt;path d=&quot;M242 140 C246 160 246 184 238 206&quot;/&gt;&lt;path d=&quot;M254 124 C258 118 260 112 259 106&quot;/&gt;
+  &lt;/g&gt;
 
-  <!-- ears -->
-  <ellipse cx="82" cy="168" rx="13" ry="20" fill="#eab597"/>
-  <ellipse cx="238" cy="168" rx="13" ry="20" fill="#eab597"/>
-  <path d="M84 158 Q78 168 85 178" stroke="#cf957a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-  <path d="M236 158 Q242 168 235 178" stroke="#cf957a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  &lt;!-- ears --&gt;
+  &lt;ellipse cx=&quot;82&quot; cy=&quot;168&quot; rx=&quot;13&quot; ry=&quot;20&quot; fill=&quot;#eab597&quot;/&gt;
+  &lt;ellipse cx=&quot;238&quot; cy=&quot;168&quot; rx=&quot;13&quot; ry=&quot;20&quot; fill=&quot;#eab597&quot;/&gt;
+  &lt;path d=&quot;M84 158 Q78 168 85 178&quot; stroke=&quot;#cf957a&quot; stroke-width=&quot;2.5&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M236 158 Q242 168 235 178&quot; stroke=&quot;#cf957a&quot; stroke-width=&quot;2.5&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot;/&gt;
 
-  <!-- head -->
-  <path d="M160 42 C216 42 240 86 240 142 C240 210 214 254 160 254 C106 254 80 210 80 142 C80 86 104 42 160 42 Z" fill="url(#sSkin)"/>
-  <!-- thinning hair on top -->
-  <path d="M90 118 C88 74 116 46 160 44 C204 46 232 74 230 118 C222 96 206 82 186 80 C176 70 146 70 134 80 C114 82 98 96 90 118 Z" fill="#d6d1c8"/>
-  <g stroke="#b3ada2" stroke-width="2" fill="none" stroke-linecap="round">
-    <path d="M110 84 C122 62 140 52 160 50"/><path d="M122 78 C134 62 150 56 166 56"/>
-    <path d="M210 84 C198 62 180 52 160 50"/><path d="M198 78 C186 62 170 56 154 58"/>
-    <path d="M96 106 C100 90 108 80 120 72"/><path d="M224 106 C220 90 212 80 200 72"/>
-    <path d="M146 72 C150 64 158 60 166 62"/><path d="M160 70 C164 62 172 58 180 60"/>
-  </g>
-  <ellipse cx="160" cy="58" rx="22" ry="7" fill="#fff" opacity=".22"/>
+  &lt;!-- head --&gt;
+  &lt;path d=&quot;M160 42 C216 42 240 86 240 142 C240 210 214 254 160 254 C106 254 80 210 80 142 C80 86 104 42 160 42 Z&quot; fill=&quot;url(#sSkin)&quot;/&gt;
+  &lt;!-- thinning hair on top --&gt;
+  &lt;path d=&quot;M90 118 C88 74 116 46 160 44 C204 46 232 74 230 118 C222 96 206 82 186 80 C176 70 146 70 134 80 C114 82 98 96 90 118 Z&quot; fill=&quot;#d6d1c8&quot;/&gt;
+  &lt;g stroke=&quot;#b3ada2&quot; stroke-width=&quot;2&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot;&gt;
+    &lt;path d=&quot;M110 84 C122 62 140 52 160 50&quot;/&gt;&lt;path d=&quot;M122 78 C134 62 150 56 166 56&quot;/&gt;
+    &lt;path d=&quot;M210 84 C198 62 180 52 160 50&quot;/&gt;&lt;path d=&quot;M198 78 C186 62 170 56 154 58&quot;/&gt;
+    &lt;path d=&quot;M96 106 C100 90 108 80 120 72&quot;/&gt;&lt;path d=&quot;M224 106 C220 90 212 80 200 72&quot;/&gt;
+    &lt;path d=&quot;M146 72 C150 64 158 60 166 62&quot;/&gt;&lt;path d=&quot;M160 70 C164 62 172 58 180 60&quot;/&gt;
+  &lt;/g&gt;
+  &lt;ellipse cx=&quot;160&quot; cy=&quot;58&quot; rx=&quot;22&quot; ry=&quot;7&quot; fill=&quot;#fff&quot; opacity=&quot;.22&quot;/&gt;
 
-  <!-- eyes -->
-  <ellipse cx="128" cy="158" rx="10" ry="7.5" fill="#fff"/>
-  <ellipse cx="192" cy="158" rx="10" ry="7.5" fill="#fff"/>
-  <circle cx="129" cy="158" r="5.5" fill="#7d9277"/>
-  <circle cx="193" cy="158" r="5.5" fill="#7d9277"/>
-  <circle cx="129" cy="158" r="2.6" fill="#22262b"/>
-  <circle cx="193" cy="158" r="2.6" fill="#22262b"/>
-  <circle cx="131" cy="156" r="1.4" fill="#fff"/>
-  <circle cx="195" cy="156" r="1.4" fill="#fff"/>
-  <!-- smile crinkles -->
-  <path d="M112 164 Q118 170 126 168" stroke="#d29c80" stroke-width="2" fill="none" stroke-linecap="round"/>
-  <path d="M208 164 Q202 170 194 168" stroke="#d29c80" stroke-width="2" fill="none" stroke-linecap="round"/>
+  &lt;!-- eyes --&gt;
+  &lt;ellipse cx=&quot;128&quot; cy=&quot;158&quot; rx=&quot;10&quot; ry=&quot;7.5&quot; fill=&quot;#fff&quot;/&gt;
+  &lt;ellipse cx=&quot;192&quot; cy=&quot;158&quot; rx=&quot;10&quot; ry=&quot;7.5&quot; fill=&quot;#fff&quot;/&gt;
+  &lt;circle cx=&quot;129&quot; cy=&quot;158&quot; r=&quot;5.5&quot; fill=&quot;#7d9277&quot;/&gt;
+  &lt;circle cx=&quot;193&quot; cy=&quot;158&quot; r=&quot;5.5&quot; fill=&quot;#7d9277&quot;/&gt;
+  &lt;circle cx=&quot;129&quot; cy=&quot;158&quot; r=&quot;2.6&quot; fill=&quot;#22262b&quot;/&gt;
+  &lt;circle cx=&quot;193&quot; cy=&quot;158&quot; r=&quot;2.6&quot; fill=&quot;#22262b&quot;/&gt;
+  &lt;circle cx=&quot;131&quot; cy=&quot;156&quot; r=&quot;1.4&quot; fill=&quot;#fff&quot;/&gt;
+  &lt;circle cx=&quot;195&quot; cy=&quot;156&quot; r=&quot;1.4&quot; fill=&quot;#fff&quot;/&gt;
+  &lt;!-- smile crinkles --&gt;
+  &lt;path d=&quot;M112 164 Q118 170 126 168&quot; stroke=&quot;#d29c80&quot; stroke-width=&quot;2&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M208 164 Q202 170 194 168&quot; stroke=&quot;#d29c80&quot; stroke-width=&quot;2&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot;/&gt;
 
-  <!-- glasses: dark grey translucent rectangular frames -->
-  <rect x="100" y="138" width="56" height="40" rx="8" fill="url(#sLens)" stroke="#555b63" stroke-width="6"/>
-  <rect x="164" y="138" width="56" height="40" rx="8" fill="url(#sLens)" stroke="#555b63" stroke-width="6"/>
-  <path d="M156 152 Q160 148 164 152" stroke="#555b63" stroke-width="5" fill="none"/>
-  <path d="M100 148 L84 146" stroke="#555b63" stroke-width="5" stroke-linecap="round"/>
-  <path d="M220 148 L236 146" stroke="#555b63" stroke-width="5" stroke-linecap="round"/>
-  <circle cx="104" cy="142" r="2" fill="#9aa1a9"/>
-  <circle cx="216" cy="142" r="2" fill="#9aa1a9"/>
+  &lt;!-- glasses: dark grey translucent rectangular frames --&gt;
+  &lt;rect x=&quot;100&quot; y=&quot;138&quot; width=&quot;56&quot; height=&quot;40&quot; rx=&quot;8&quot; fill=&quot;url(#sLens)&quot; stroke=&quot;#555b63&quot; stroke-width=&quot;6&quot;/&gt;
+  &lt;rect x=&quot;164&quot; y=&quot;138&quot; width=&quot;56&quot; height=&quot;40&quot; rx=&quot;8&quot; fill=&quot;url(#sLens)&quot; stroke=&quot;#555b63&quot; stroke-width=&quot;6&quot;/&gt;
+  &lt;path d=&quot;M156 152 Q160 148 164 152&quot; stroke=&quot;#555b63&quot; stroke-width=&quot;5&quot; fill=&quot;none&quot;/&gt;
+  &lt;path d=&quot;M100 148 L84 146&quot; stroke=&quot;#555b63&quot; stroke-width=&quot;5&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M220 148 L236 146&quot; stroke=&quot;#555b63&quot; stroke-width=&quot;5&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;circle cx=&quot;104&quot; cy=&quot;142&quot; r=&quot;2&quot; fill=&quot;#9aa1a9&quot;/&gt;
+  &lt;circle cx=&quot;216&quot; cy=&quot;142&quot; r=&quot;2&quot; fill=&quot;#9aa1a9&quot;/&gt;
 
-  <!-- nose -->
-  <path d="M160 168 C156 186 150 196 152 202 C156 208 166 208 170 202" stroke="#cf957a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  &lt;!-- nose --&gt;
+  &lt;path d=&quot;M160 168 C156 186 150 196 152 202 C156 208 166 208 170 202&quot; stroke=&quot;#cf957a&quot; stroke-width=&quot;3.5&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot;/&gt;
 
-  <!-- rosy cheeks -->
-  <ellipse cx="114" cy="200" rx="15" ry="9" fill="#f29a8a" opacity=".45"/>
-  <ellipse cx="206" cy="200" rx="15" ry="9" fill="#f29a8a" opacity=".45"/>
+  &lt;!-- rosy cheeks --&gt;
+  &lt;ellipse cx=&quot;114&quot; cy=&quot;200&quot; rx=&quot;15&quot; ry=&quot;9&quot; fill=&quot;#f29a8a&quot; opacity=&quot;.45&quot;/&gt;
+  &lt;ellipse cx=&quot;206&quot; cy=&quot;200&quot; rx=&quot;15&quot; ry=&quot;9&quot; fill=&quot;#f29a8a&quot; opacity=&quot;.45&quot;/&gt;
 
-  <!-- light stubble around mouth and chin -->
-  <path d="M122 212 C128 244 192 244 198 212 C198 234 184 252 160 252 C136 252 122 234 122 212 Z" fill="#c9b6a6" opacity=".22"/>
+  &lt;!-- light stubble around mouth and chin --&gt;
+  &lt;path d=&quot;M122 212 C128 244 192 244 198 212 C198 234 184 252 160 252 C136 252 122 234 122 212 Z&quot; fill=&quot;#c9b6a6&quot; opacity=&quot;.22&quot;/&gt;
 
-  <g id="sSmile">
-  <path d="M136 220 Q160 236 184 220" stroke="#b5635a" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-  <path d="M132 218 Q134 222 137 221" stroke="#b5635a" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <path d="M188 218 Q186 222 183 221" stroke="#b5635a" stroke-width="3" fill="none" stroke-linecap="round"/>
-  </g>
-  <g id="sWow" style="display:none"><ellipse cx="160" cy="226" rx="13" ry="15" fill="#8a3a35"/><ellipse cx="160" cy="233" rx="8" ry="5" fill="#d9706a"/></g>
+  &lt;g id=&quot;sSmile&quot;&gt;
+  &lt;path d=&quot;M136 220 Q160 236 184 220&quot; stroke=&quot;#b5635a&quot; stroke-width=&quot;4.5&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M132 218 Q134 222 137 221&quot; stroke=&quot;#b5635a&quot; stroke-width=&quot;3&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M188 218 Q186 222 183 221&quot; stroke=&quot;#b5635a&quot; stroke-width=&quot;3&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;/g&gt;
+  &lt;g id=&quot;sWow&quot; style=&quot;display:none&quot;&gt;&lt;ellipse cx=&quot;160&quot; cy=&quot;226&quot; rx=&quot;13&quot; ry=&quot;15&quot; fill=&quot;#8a3a35&quot;/&gt;&lt;ellipse cx=&quot;160&quot; cy=&quot;233&quot; rx=&quot;8&quot; ry=&quot;5&quot; fill=&quot;#d9706a&quot;/&gt;&lt;/g&gt;
 
-  <!-- raised arm in sweater sleeve -->
-  <path d="M252 300 C276 300 300 290 318 268 L340 284 C322 316 290 336 262 340 Z" fill="#1d1f24" stroke="#0d0e11" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M316 262 L344 286" stroke="#34373f" stroke-width="10" stroke-linecap="round"/>
-  <!-- handle -->
-  <path d="M338 262 L364 214" stroke="#5a3a22" stroke-width="20" stroke-linecap="round"/>
-  <path d="M338 262 L364 214" stroke="#7a5233" stroke-width="7" stroke-linecap="round" opacity=".7"/>
-  <rect x="356" y="196" width="26" height="22" rx="4" fill="#c99a3a" stroke="#8a6a22" stroke-width="2.5" transform="rotate(28 369 207)"/>
-  <!-- hand gripping the handle -->
-  <ellipse cx="336" cy="262" rx="20" ry="17" fill="#eebc9f" stroke="#cf957a" stroke-width="2.5"/>
-  <path d="M326 252 Q340 248 350 254 M324 260 Q340 256 352 262 M326 268 Q338 266 348 270" stroke="#cf957a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-  <!-- lens -->
-  <circle cx="388" cy="150" r="54" fill="url(#sGlass)"/>
-  <circle cx="388" cy="150" r="54" fill="none" stroke="#F2B33D" stroke-width="13"/>
-  <circle cx="388" cy="150" r="45" fill="none" stroke="#a9812f" stroke-width="2.5"/>
-  <path d="M358 132 Q366 112 388 106" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" opacity=".85"/>
-  <circle cx="404" cy="172" r="5" fill="#fff" opacity=".6"/>
-</svg>
-  <div class="barcol">
-  <form class="bar" id="form" autocomplete="off">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f0c466" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <input id="q" type="text" maxlength="300" aria-label="Ask anything you want to learn about" enterkeyhint="search">
-    <button class="go" id="go" type="submit">Search</button>
-  </form>
-  <div class="examples" id="examples">Try:
-    <button type="button" data-q="What is a gigabyte?">What is a gigabyte?</button> ·
-    <button type="button" data-q="Why is the sky blue?">Why is the sky blue?</button> ·
-    <button type="button" data-q="Who invented the telephone?">Who invented the telephone?</button>
-  </div>
-  </div>
-  </div>
+  &lt;!-- raised arm in sweater sleeve --&gt;
+  &lt;path d=&quot;M252 300 C276 300 300 290 318 268 L340 284 C322 316 290 336 262 340 Z&quot; fill=&quot;#1d1f24&quot; stroke=&quot;#0d0e11&quot; stroke-width=&quot;3&quot; stroke-linejoin=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M316 262 L344 286&quot; stroke=&quot;#34373f&quot; stroke-width=&quot;10&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;!-- handle --&gt;
+  &lt;path d=&quot;M338 262 L364 214&quot; stroke=&quot;#5a3a22&quot; stroke-width=&quot;20&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;path d=&quot;M338 262 L364 214&quot; stroke=&quot;#7a5233&quot; stroke-width=&quot;7&quot; stroke-linecap=&quot;round&quot; opacity=&quot;.7&quot;/&gt;
+  &lt;rect x=&quot;356&quot; y=&quot;196&quot; width=&quot;26&quot; height=&quot;22&quot; rx=&quot;4&quot; fill=&quot;#c99a3a&quot; stroke=&quot;#8a6a22&quot; stroke-width=&quot;2.5&quot; transform=&quot;rotate(28 369 207)&quot;/&gt;
+  &lt;!-- hand gripping the handle --&gt;
+  &lt;ellipse cx=&quot;336&quot; cy=&quot;262&quot; rx=&quot;20&quot; ry=&quot;17&quot; fill=&quot;#eebc9f&quot; stroke=&quot;#cf957a&quot; stroke-width=&quot;2.5&quot;/&gt;
+  &lt;path d=&quot;M326 252 Q340 248 350 254 M324 260 Q340 256 352 262 M326 268 Q338 266 348 270&quot; stroke=&quot;#cf957a&quot; stroke-width=&quot;2.2&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot;/&gt;
+  &lt;!-- lens --&gt;
+  &lt;circle cx=&quot;388&quot; cy=&quot;150&quot; r=&quot;54&quot; fill=&quot;url(#sGlass)&quot;/&gt;
+  &lt;circle cx=&quot;388&quot; cy=&quot;150&quot; r=&quot;54&quot; fill=&quot;none&quot; stroke=&quot;#F2B33D&quot; stroke-width=&quot;13&quot;/&gt;
+  &lt;circle cx=&quot;388&quot; cy=&quot;150&quot; r=&quot;45&quot; fill=&quot;none&quot; stroke=&quot;#a9812f&quot; stroke-width=&quot;2.5&quot;/&gt;
+  &lt;path d=&quot;M358 132 Q366 112 388 106&quot; stroke=&quot;#fff&quot; stroke-width=&quot;7&quot; fill=&quot;none&quot; stroke-linecap=&quot;round&quot; opacity=&quot;.85&quot;/&gt;
+  &lt;circle cx=&quot;404&quot; cy=&quot;172&quot; r=&quot;5&quot; fill=&quot;#fff&quot; opacity=&quot;.6&quot;/&gt;
+&lt;/svg&gt;
+  &lt;div class=&quot;barcol&quot;&gt;
+  &lt;form class=&quot;bar&quot; id=&quot;form&quot; autocomplete=&quot;off&quot;&gt;
+    &lt;svg width=&quot;20&quot; height=&quot;20&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;#f0c466&quot; stroke-width=&quot;2.4&quot; stroke-linecap=&quot;round&quot; aria-hidden=&quot;true&quot;&gt;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;7&quot;/&gt;&lt;path d=&quot;m20 20-3.5-3.5&quot;/&gt;&lt;/svg&gt;
+    &lt;input id=&quot;q&quot; type=&quot;text&quot; maxlength=&quot;300&quot; aria-label=&quot;Ask anything you want to learn about&quot; enterkeyhint=&quot;search&quot;&gt;
+    &lt;button class=&quot;go&quot; id=&quot;go&quot; type=&quot;submit&quot;&gt;Search&lt;/button&gt;
+  &lt;/form&gt;
+  &lt;div class=&quot;examples&quot; id=&quot;examples&quot;&gt;Try:
+    &lt;button type=&quot;button&quot; data-q=&quot;What is a gigabyte?&quot;&gt;What is a gigabyte?&lt;/button&gt; ·
+    &lt;button type=&quot;button&quot; data-q=&quot;Why is the sky blue?&quot;&gt;Why is the sky blue?&lt;/button&gt; ·
+    &lt;button type=&quot;button&quot; data-q=&quot;Who invented the telephone?&quot;&gt;Who invented the telephone?&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;/div&gt;
 
-  <div class="status hide" id="status"><div class="dots"><span></span><span></span><span></span></div><div style="margin-top:8px">Searching Learn...Wow!</div></div>
-  <div class="err hide" id="err"></div>
+  &lt;div class=&quot;status hide&quot; id=&quot;status&quot;&gt;&lt;div class=&quot;dots&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;margin-top:8px&quot;&gt;Searching Learn...Wow!&lt;/div&gt;&lt;/div&gt;
+  &lt;div class=&quot;err hide&quot; id=&quot;err&quot;&gt;&lt;/div&gt;
 
-  <div class="clar hide" id="clar">
-    <button class="x dark" type="button" aria-label="Close" data-close>&times;</button>
-    <h3 id="clarQ"></h3>
-    <div class="opts" id="opts"></div>
-    <div class="ownlabel">Or type what you mean:</div>
-    <form class="own" id="ownForm" autocomplete="off">
-      <input id="own" type="text" maxlength="120" aria-label="Type what you mean">
-      <button type="submit">Go</button>
-    </form>
-  </div>
+  &lt;div class=&quot;clar hide&quot; id=&quot;clar&quot;&gt;
+    &lt;button class=&quot;x dark&quot; type=&quot;button&quot; aria-label=&quot;Close&quot; data-close&gt;&amp;times;&lt;/button&gt;
+    &lt;h3 id=&quot;clarQ&quot;&gt;&lt;/h3&gt;
+    &lt;div class=&quot;opts&quot; id=&quot;opts&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;ownlabel&quot;&gt;Or type what you mean:&lt;/div&gt;
+    &lt;form class=&quot;own&quot; id=&quot;ownForm&quot; autocomplete=&quot;off&quot;&gt;
+      &lt;input id=&quot;own&quot; type=&quot;text&quot; maxlength=&quot;120&quot; aria-label=&quot;Type what you mean&quot;&gt;
+      &lt;button type=&quot;submit&quot;&gt;Go&lt;/button&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
 
-  <div class="results hide" id="results">
-    <button class="x" type="button" aria-label="Close results" data-close>&times; Close</button>
-    <div class="asked">You asked: <b id="asked"></b></div>
-    <div class="answer"><div class="tag">Quick Answer</div><p id="answer"></p></div>
-    <div class="note">AI can make mistakes, so double-check anything important.</div>
-    <div class="more">Explore more on Learn...Wow!</div>
-    <div class="list" id="list"></div>
-    <button class="again" id="again" type="button">New Search</button>
-  </div>
-</div>
+  &lt;div class=&quot;results hide&quot; id=&quot;results&quot;&gt;
+    &lt;button class=&quot;x&quot; type=&quot;button&quot; aria-label=&quot;Close results&quot; data-close&gt;&amp;times; Close&lt;/button&gt;
+    &lt;div class=&quot;asked&quot;&gt;You asked: &lt;b id=&quot;asked&quot;&gt;&lt;/b&gt;&lt;/div&gt;
+    &lt;div class=&quot;answer&quot;&gt;&lt;div class=&quot;tag&quot;&gt;Quick Answer&lt;/div&gt;&lt;p id=&quot;answer&quot;&gt;&lt;/p&gt;&lt;/div&gt;
+    &lt;div class=&quot;note&quot;&gt;AI can make mistakes, so double-check anything important.&lt;/div&gt;
+    &lt;div class=&quot;more&quot;&gt;Explore more on Learn...Wow!&lt;/div&gt;
+    &lt;div class=&quot;list&quot; id=&quot;list&quot;&gt;&lt;/div&gt;
+    &lt;button class=&quot;again&quot; id=&quot;again&quot; type=&quot;button&quot;&gt;New Search&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
 
-<script>
+&lt;script&gt;
 (function(){
-  const $ = (id) => document.getElementById(id);
-  let busy = false, current = "", asked = "";
+  const $ = (id) =&gt; document.getElementById(id);
+  let busy = false, current = &quot;&quot;, asked = &quot;&quot;;
 
-  function esc(s){ return String(s || "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
-  function hideAll(){ ["status","err","clar","results"].forEach(id => $(id).classList.add("hide")); }
-  function showErr(msg){ hideAll(); $("err").textContent = msg; $("err").classList.remove("hide"); }
+  function esc(s){ return String(s || &quot;&quot;).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g, c =&gt; ({ &quot;&amp;&quot;:&quot;&amp;amp;&quot;,&quot;&lt;&quot;:&quot;&amp;lt;&quot;,&quot;&gt;&quot;:&quot;&amp;gt;&quot;,&#x27;&quot;&#x27;:&quot;&amp;quot;&quot;,&quot;&#x27;&quot;:&quot;&amp;#39;&quot; }[c])); }
+  function hideAll(){ [&quot;status&quot;,&quot;err&quot;,&quot;clar&quot;,&quot;results&quot;].forEach(id =&gt; $(id).classList.add(&quot;hide&quot;)); }
+  function showErr(msg){ hideAll(); $(&quot;err&quot;).textContent = msg; $(&quot;err&quot;).classList.remove(&quot;hide&quot;); }
 
   async function run(question, reply){
     if (busy) return;
-    question = String(question || "").trim();
-    if (question.length < 2) { $("q").focus(); return; }
-    busy = true; $("go").disabled = true;
-    hideAll(); $("status").classList.remove("hide");
+    question = String(question || &quot;&quot;).trim();
+    if (question.length &lt; 2) { $(&quot;q&quot;).focus(); return; }
+    busy = true; $(&quot;go&quot;).disabled = true;
+    hideAll(); $(&quot;status&quot;).classList.remove(&quot;hide&quot;);
     try {
-      const r = await fetch("/api/search", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const r = await fetch(&quot;/api/search&quot;, {
+        method: &quot;POST&quot;,
+        headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
         body: JSON.stringify(reply ? { question, reply, asked } : { question })
       });
-      const j = await r.json().catch(() => ({}));
+      const j = await r.json().catch(() =&gt; ({}));
       if (r.status === 402) { hideAll(); return; }          // Join / limit screen is shown
-      if (!r.ok) { showErr(j.error || "Something went wrong. Please try again."); return; }
+      if (!r.ok) { showErr(j.error || &quot;Something went wrong. Please try again.&quot;); return; }
       current = question;
-      if (j.type === "clarify") return showClarify(j);
+      if (j.type === &quot;clarify&quot;) return showClarify(j);
       showResults(j);
     } catch (e) {
-      showErr("The search couldn't connect. Please check your connection and try again.");
+      showErr(&quot;The search couldn&#x27;t connect. Please check your connection and try again.&quot;);
     } finally {
-      busy = false; $("go").disabled = false;
+      busy = false; $(&quot;go&quot;).disabled = false;
     }
   }
 
   function showClarify(j){
     hideAll();
     asked = j.clarify;
-    $("clarQ").textContent = j.clarify;
-    const box = $("opts"); box.innerHTML = "";
-    j.options.forEach(o => {
-      const b = document.createElement("button"); b.type = "button"; b.textContent = o;
-      b.onclick = () => run(current, o);
+    $(&quot;clarQ&quot;).textContent = j.clarify;
+    const box = $(&quot;opts&quot;); box.innerHTML = &quot;&quot;;
+    j.options.forEach(o =&gt; {
+      const b = document.createElement(&quot;button&quot;); b.type = &quot;button&quot;; b.textContent = o;
+      b.onclick = () =&gt; run(current, o);
       box.appendChild(b);
     });
-    $("own").value = "";
-    $("clar").classList.remove("hide");
+    $(&quot;own&quot;).value = &quot;&quot;;
+    $(&quot;clar&quot;).classList.remove(&quot;hide&quot;);
   }
 
   function showResults(j){
     hideAll();
-    $("asked").textContent = j.question || current;
-    $("answer").textContent = j.answer;
-    $("list").innerHTML = (j.listings || []).map(x =>
-      `<a class="item" href="${esc(x.url)}" target="_top" rel="noopener">
-         <div class="crumb"><i>${x.library ? "AI" : "LW"}</i>${esc(x.crumb)}</div>
-         <div class="ttl">${esc(x.title)}</div>
-         <div class="desc">${esc(x.line)}</div>
-       </a>`).join("");
-    $("results").classList.remove("hide");
+    $(&quot;asked&quot;).textContent = j.question || current;
+    $(&quot;answer&quot;).textContent = j.answer;
+    $(&quot;list&quot;).innerHTML = (j.listings || []).map(x =&gt;
+      `&lt;a class=&quot;item&quot; href=&quot;${esc(x.url)}&quot; target=&quot;_top&quot; rel=&quot;noopener&quot;&gt;
+         &lt;div class=&quot;crumb&quot;&gt;&lt;i&gt;${x.library ? &quot;AI&quot; : &quot;LW&quot;}&lt;/i&gt;${esc(x.crumb)}&lt;/div&gt;
+         &lt;div class=&quot;ttl&quot;&gt;${esc(x.title)}&lt;/div&gt;
+         &lt;div class=&quot;desc&quot;&gt;${esc(x.line)}&lt;/div&gt;
+       &lt;/a&gt;`).join(&quot;&quot;);
+    $(&quot;results&quot;).classList.remove(&quot;hide&quot;);
   }
 
-  $("form").addEventListener("submit", e => { e.preventDefault(); $("q").blur(); run($("q").value); });
-  $("ownForm").addEventListener("submit", e => { e.preventDefault(); const v = $("own").value.trim(); if (v) run(current, v); });
-  $("examples").addEventListener("click", e => { const q = e.target.getAttribute("data-q"); if (q) { $("q").value = q; run(q); } });
-  document.querySelectorAll("[data-close]").forEach(b => b.onclick = () => { hideAll(); $("q").value = ""; });
-  $("again").onclick = () => { hideAll(); $("q").value = ""; $("q").focus(); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  $(&quot;form&quot;).addEventListener(&quot;submit&quot;, e =&gt; { e.preventDefault(); $(&quot;q&quot;).blur(); run($(&quot;q&quot;).value); });
+  $(&quot;ownForm&quot;).addEventListener(&quot;submit&quot;, e =&gt; { e.preventDefault(); const v = $(&quot;own&quot;).value.trim(); if (v) run(current, v); });
+  $(&quot;examples&quot;).addEventListener(&quot;click&quot;, e =&gt; { const q = e.target.getAttribute(&quot;data-q&quot;); if (q) { $(&quot;q&quot;).value = q; run(q); } });
+  document.querySelectorAll(&quot;[data-close]&quot;).forEach(b =&gt; b.onclick = () =&gt; { hideAll(); $(&quot;q&quot;).value = &quot;&quot;; });
+  $(&quot;again&quot;).onclick = () =&gt; { hideAll(); $(&quot;q&quot;).value = &quot;&quot;; $(&quot;q&quot;).focus(); window.scrollTo({ top: 0, behavior: &quot;smooth&quot; }); };
 })();
-</script>
+&lt;/script&gt;
 
-<!--lw-embed-->
-<script>
+&lt;!--lw-embed--&gt;
+&lt;script&gt;
 (function(){
  if(window.self===window.top)return;
- document.documentElement.classList.add('lw-embed');
+ document.documentElement.classList.add(&#x27;lw-embed&#x27;);
  var last=0;
- var tmr=null;function send(){var v=Math.ceil(document.body.offsetHeight);if(Math.abs(v-last)>8){last=v;parent.postMessage({lwToolHeight:v},'*');}}function h(){clearTimeout(tmr);tmr=setTimeout(send,120);}
+ var tmr=null;function send(){var v=Math.ceil(document.body.offsetHeight);if(Math.abs(v-last)&gt;8){last=v;parent.postMessage({lwToolHeight:v},&#x27;*&#x27;);}}function h(){clearTimeout(tmr);tmr=setTimeout(send,120);}
  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
- setInterval(h,1000);window.addEventListener('load',h);h();
+ setInterval(h,1000);window.addEventListener(&#x27;load&#x27;,h);h();
 })();
-</script>
-<style>html.lw-embed,html.lw-embed body{height:auto;min-height:0;background:transparent}html.lw-embed body{padding-top:8px;padding-bottom:8px}</style>
-<!--/lw-embed-->
-</body>
-</html>
+&lt;/script&gt;
+&lt;style&gt;html.lw-embed,html.lw-embed body{height:auto;min-height:0}html.lw-embed body{padding-top:8px;padding-bottom:8px}&lt;/style&gt;
+&lt;!--/lw-embed--&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</textarea></section><section><div class="h"><div><h2>2. api/search.js</h2><p>In GitHub, click Add file → Create new file and type the name exactly as api/search.js. Typing api/ creates the folder for you.</p></div><button onclick="cp('c1',this)">Copy code</button></div><textarea id="c1" readonly>// Learn...Wow! Search Engine
+// Vercel serverless function. No packages needed.
+//
+// A visitor types a question. The search either asks one quick clarifying question,
+// or gives a one-paragraph answer plus search-style listings that point to
+// Learn...Wow! experiences and Mr. Paul&#x27;s AI Library topic sections.
+//
+// Environment variables (Vercel &gt; Project &gt; Settings &gt; Environment Variables):
+//   ANTHROPIC_API_KEY        required
+//   UPSTASH_REDIS_REST_URL   recommended (or KV_REST_API_URL)   — daily limits + answer cache
+//   UPSTASH_REDIS_REST_TOKEN recommended (or KV_REST_API_TOKEN)
+//   Optional: MODEL, VISITOR_DAILY (default 3), DAILY_GLOBAL (default 2000),
+//             LIBRARY_URL, LW_GATE_URL, ALLOWED_HOSTS
+
+const MODEL = process.env.MODEL || &quot;claude-haiku-5-5&quot;;
+const VISITOR_DAILY = parseInt(process.env.VISITOR_DAILY || &quot;3&quot;, 10);
+const DAILY_GLOBAL = parseInt(process.env.DAILY_GLOBAL || &quot;2000&quot;, 10);
+const LIBRARY_URL = (process.env.LIBRARY_URL || &quot;https://mr-paul-ai-library.vercel.app&quot;).replace(/\/$/, &quot;&quot;);
+const GATE_URL = process.env.LW_GATE_URL || &quot;https://mr-pauls-classroom.vercel.app/api/gate&quot;;
+const ALLOWED_HOSTS = (process.env.ALLOWED_HOSTS ||
+  &quot;nusparklearnwow.com,nusparkpublishing.com,nusparkmarketing.com&quot;)
+  .split(&quot;,&quot;).map((s) =&gt; s.trim().toLowerCase()).filter(Boolean);
+
+const R_URL = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+const R_TOK = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+
+// ---------- The Learn...Wow! experiences (add a line here when a new one goes live) ----------
+const SITE = &quot;https://nusparklearnwow.com/&quot;;
+const EXPERIENCES = [
+  { id: &quot;answer-man&quot;, name: &quot;The Answer Man: Ask Mr. Paul&quot;, path: &quot;the-answer-man-mr-paul/&quot;,
+    about: &quot;Full, in-depth answers through 8 doors (Who, What, Where, When, Why, How, Evolution, Future), plus Ranking Research lists of 25, 50 or 100 in A–Z order.&quot; },
+  { id: &quot;classroom&quot;, name: &quot;Mr. Paul&#x27;s Classroom&quot;, path: &quot;mr-pauls-classroom/&quot;,
+    about: &quot;An AI teacher for kids: Mr. Paul teaches any school topic on a smart board, at the child&#x27;s grade level.&quot; },
+  { id: &quot;lecture-hall&quot;, name: &quot;The Lecture Hall&quot;, path: &quot;the-lecture-hall/&quot;,
+    about: &quot;Guided, college-style lectures for adults on any subject.&quot; },
+  { id: &quot;how-it-works&quot;, name: &quot;How It Works&quot;, path: &quot;how-it-works/&quot;,
+    about: &quot;Explains how everyday things, machines and systems work, step by step.&quot; },
+  { id: &quot;secrets&quot;, name: &quot;The Secrets of the World&quot;, path: &quot;the-secrets-of-the-world/&quot;,
+    about: &quot;Source-checked, little-known secrets and surprising facts about the world, for the whole family.&quot; },
+  { id: &quot;remember-when&quot;, name: &quot;Remember When&quot;, path: &quot;remember-when/&quot;,
+    about: &quot;A trip back through the decades: the music, TV, products, fads and events people remember.&quot; },
+  { id: &quot;food-hall&quot;, name: &quot;The Food Hall&quot;, path: &quot;the-food-hall/&quot;,
+    about: &quot;Food education: where foods come from, their history, the science of cooking, and food around the world. Not a cookbook.&quot; },
+  { id: &quot;boardroom&quot;, name: &quot;The Boardroom&quot;, path: &quot;the-boardroom-for-business/&quot;,
+    about: &quot;MBA-style business learning: how companies, markets, money, marketing and management work, for big companies and small businesses.&quot; },
+  { id: &quot;encyclopedias&quot;, name: &quot;The AI Encyclopedias&quot;, path: &quot;the-ai-encyclopedias/&quot;,
+    about: &quot;The home of Mr. Paul&#x27;s AI Library: hundreds of guided learning tools across 16 topics.&quot; },
+  { id: &quot;debate-me&quot;, name: &quot;Debate Me&quot;, path: &quot;debate-me/&quot;,
+    about: &quot;Debate an on-screen AI host on a topic, with researched proof charts for each side.&quot; },
+  { id: &quot;difference&quot;, name: &quot;What&#x27;s the Difference?&quot;, path: &quot;whats-the-difference/&quot;,
+    about: &quot;Compares two things side by side and explains exactly how they differ.&quot; },
+  { id: &quot;science-lab&quot;, name: &quot;The Science Lab&quot;, path: &quot;the-science-lab/&quot;,
+    about: &quot;Hands-on science: experiments and explanations with Mr. Paul.&quot; },
+  { id: &quot;travel-agent&quot;, name: &quot;The Travel Agent&quot;, path: &quot;the-travel-agent/&quot;,
+    about: &quot;Explore destinations around the world: places, culture, history and what to know before you go.&quot; },
+  { id: &quot;news-desk&quot;, name: &quot;The Catch-Up News Desk&quot;, path: &quot;the-catch-up-news-desk/&quot;,
+    about: &quot;Catch up on the news you missed, by time window and location.&quot; },
+  { id: &quot;art-studio&quot;, name: &quot;The Art Studio&quot;, path: &quot;the-art-studio/&quot;,
+    about: &quot;Art lessons in famous styles plus an online paint canvas.&quot; },
+  { id: &quot;music-studio&quot;, name: &quot;The Music Studio&quot;, path: &quot;the-music-studio/&quot;,
+    about: &quot;Make your own music: write on a staff, pick instruments, and learn how music is built.&quot; },
+  { id: &quot;sports-arena&quot;, name: &quot;The All-Time Sports Arena&quot;, path: &quot;the-all-time-sports-arena/&quot;,
+    about: &quot;Simulated baseball and football matchups between great teams and players from different eras.&quot; },
+  { id: &quot;board-games&quot;, name: &quot;Board Game Time&quot;, path: &quot;board-game-time/&quot;,
+    about: &quot;Play classic board games against computer players.&quot; },
+  { id: &quot;card-table&quot;, name: &quot;The Card Table&quot;, path: &quot;the-card-table/&quot;,
+    about: &quot;Play classic card games with an AI card partner.&quot; },
+  { id: &quot;puzzle-parlor&quot;, name: &quot;The Puzzle Parlor&quot;, path: &quot;the-puzzle-parlor/&quot;,
+    about: &quot;Puzzles and brain challenges of many kinds.&quot; },
+  { id: &quot;guess-room&quot;, name: &quot;The Guess Room&quot;, path: &quot;the-guess-room/&quot;,
+    about: &quot;Guessing games and mysteries, including a detective mode.&quot; },
+  { id: &quot;corner-cafe&quot;, name: &quot;The Corner Café&quot;, path: &quot;the-corner-cafe/&quot;,
+    about: &quot;Friendly one-on-one or roundtable chats with AI personalities, for adults 18 and up.&quot; },
+];
+const EXP_BY_ID = Object.fromEntries(EXPERIENCES.map((e) =&gt; [e.id, e]));
+
+// ---------- Mr. Paul&#x27;s AI Library (read live, so new library tools show up on their own) ----------
+let LIB = null, LIB_AT = 0;
+async function library() {
+  if (LIB &amp;&amp; Date.now() - LIB_AT &lt; 6 * 3600 * 1000) return LIB;
+  try {
+    const ctl = new AbortController(); const t = setTimeout(() =&gt; ctl.abort(), 4000);
+    const r = await fetch(LIBRARY_URL + &quot;/catalog.json&quot;, { signal: ctl.signal });
+    clearTimeout(t);
+    const c = await r.json();
+    if (Array.isArray(c.topics) &amp;&amp; Array.isArray(c.tools)) {
+      const byTitle = {};
+      c.tools.forEach((t) =&gt; { byTitle[norm(t.t)] = t; });
+      LIB = { topics: c.topics, tools: c.tools, byTitle };
+      LIB_AT = Date.now();
+    }
+  } catch { /* keep the last copy, or none */ }
+  return LIB;
+}
+
+// ---------- rules ----------
+function rules(lib, clarified) {
+  const exp = EXPERIENCES.filter((e) =&gt; e.id !== &quot;answer-man&quot;)
+    .map((e) =&gt; `- ${e.id}: ${e.name} — ${e.about}`).join(&quot;\n&quot;);
+  const libText = lib
+    ? lib.topics.map((name, i) =&gt; `${name}: ` + lib.tools.filter((t) =&gt; t.k === i).map((t) =&gt; t.t).join(&quot; | &quot;)).join(&quot;\n&quot;)
+    : &quot;(library list unavailable — leave \&quot;library\&quot; empty)&quot;;
+  return `You are the Learn...Wow! Search Engine on the NuSpark Learn...Wow! learning site. You give one clear, accurate paragraph that answers the question, then point the person to the Learn...Wow! experiences that go deeper. You speak as Learn...Wow!, never as a person.
+
+RULES
+1. Knowledge only. Never give maps, addresses, directions, phone numbers, hours, prices to buy, or &quot;near me&quot; results. Never use or ask for the person&#x27;s location.
+2. Companies: name a company only as fact or history. Never recommend, rank, compare, review or list companies, brands, products, apps, services or local businesses, and never point anyone to a business. For those questions use type &quot;redirect&quot;: the answer must start with exactly &quot;Learn...Wow! answers knowledge questions, so I don&#x27;t recommend, rank, or point to specific companies or local businesses.&quot; and then give the knowledge version (what that kind of company does, how it works, what to look for in general).
+3. Never rank opinion topics (&quot;best&quot;, &quot;top&quot;, &quot;greatest&quot;, &quot;favorite&quot;). Say Learn...Wow! doesn&#x27;t rank things like this because &quot;best&quot; depends on what you&#x27;re looking for, give a short neutral overview, and mention that The Answer Man&#x27;s Ranking Research builds A–Z lists of what shows up most in published rankings. Measurable facts (tallest, largest, oldest, fastest) get a straight answer.
+4. Health, legal and money: general education only, and say to check with a doctor, lawyer or financial professional.
+5. Be neutral on contested political, religious and social topics: explain the main views fairly, take no side.
+6. Family-friendly always. For an inappropriate or unsafe question use type &quot;redirect&quot; with a kind reply and a better question to explore.
+7. Accuracy first. If unsure, say so plainly. Use web search only when the answer depends on recent or current information. Never overgeneralize: say when something varies.
+8. People type fast. Silently read past typos and answer what they meant. Never mention their mistakes.
+9. Plain text only: no markdown, no lists, no headings, no links, no URLs.
+
+CLARIFYING
+${clarified
+  ? &quot;The person has already answered a clarifying question. Never ask another one: answer now.&quot;
+  : `If, and only if, the question could mean truly different things (for example &quot;Mercury&quot;: the planet, the element, the Roman god, or Freddie Mercury), or is a bare word or too vague to answer well, use type &quot;clarify&quot;: write one short friendly question in &quot;clarify&quot; and 2 to 4 short tap options in &quot;options&quot;. Clear questions are answered straight away. Never clarify just to narrow a small detail.`}
+
+THE ANSWER
+One paragraph of 60 to 110 words. Lead with the direct answer, then the most useful detail and one everyday example or interesting fact. Warm, smart, plain language.
+
+LISTINGS — point to where to learn more
+The Answer Man is always shown first automatically; do not include it.
+&quot;tools&quot;: pick 2 or 3 experiences from this list that genuinely fit the question, best fit first. For each write &quot;line&quot;: one sentence (8 to 18 words) saying what the person can do there about THIS question. Only describe what that experience actually does, using its description below. Never invent features. Use an experience only if it truly fits; games and the Corner Café only for questions about games, play, puzzles or conversation.
+${exp}
+
+&quot;library&quot;: pick 0 to 2 tools from Mr. Paul&#x27;s AI Library that fit the question, copying their names EXACTLY as written below. Leave it empty if none truly fit.
+${libText}
+
+OUTPUT
+Reply with ONLY one JSON object, nothing before or after it:
+{&quot;type&quot;: &quot;answer&quot; | &quot;redirect&quot; | &quot;clarify&quot;, &quot;question&quot;: &quot;the question with spelling quietly fixed&quot;, &quot;answer&quot;: &quot;the paragraph (empty for clarify)&quot;, &quot;clarify&quot;: &quot;the clarifying question (only for clarify)&quot;, &quot;options&quot;: [&quot;...&quot;], &quot;tools&quot;: [{&quot;id&quot;: &quot;...&quot;, &quot;line&quot;: &quot;...&quot;}], &quot;library&quot;: [&quot;exact tool name&quot;]}`;
+}
+
+// ---------- helpers ----------
+async function redis(cmd) {
+  if (!R_URL || !R_TOK) return null;
+  try {
+    const r = await fetch(R_URL, {
+      method: &quot;POST&quot;,
+      headers: { Authorization: `Bearer ${R_TOK}`, &quot;Content-Type&quot;: &quot;application/json&quot; },
+      body: JSON.stringify(cmd),
+    });
+    const j = await r.json();
+    return j.result ?? null;
+  } catch { return null; }
+}
+async function bump(key) {
+  const n = await redis([&quot;INCR&quot;, key]);
+  if (n === 1) await redis([&quot;EXPIRE&quot;, key, 90000]);
+  return n;
+}
+function norm(s) { return String(s || &quot;&quot;).toLowerCase().replace(/[^a-z0-9 ]+/g, &quot; &quot;).replace(/\s+/g, &quot; &quot;).trim(); }
+function today() { return new Date().toISOString().slice(0, 10); }
+function clientIp(req) {
+  const xf = String(req.headers[&quot;x-forwarded-for&quot;] || &quot;&quot;).split(&quot;,&quot;)[0].trim();
+  return xf || req.headers[&quot;x-real-ip&quot;] || &quot;unknown&quot;;
+}
+function originAllowed(req) {
+  const origin = req.headers.origin;
+  if (!origin) return false;
+  let host;
+  try { host = new URL(origin).hostname.toLowerCase(); } catch { return false; }
+  const selfHost = String(req.headers.host || &quot;&quot;).split(&quot;:&quot;)[0].toLowerCase();
+  if (host === selfHost) return true;
+  return ALLOWED_HOSTS.some((h) =&gt; host === h || host.endsWith(&quot;.&quot; + h));
+}
+function clean(s) {
+  return String(s || &quot;&quot;)
+    .replace(/&lt;[^&gt;]{1,200}&gt;/g, &quot;&quot;)
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, &quot;$1&quot;)
+    .replace(/\(?\s*(?:https?:\/\/|www\.)[^\s)&lt;&gt;\]]+\s*\)?/gi, &quot; &quot;)
+    .replace(/\*\*|__|`+/g, &quot;&quot;)
+    .replace(/^\s*#{1,6}\s+/gm, &quot;&quot;)
+    .replace(/[ \t]{2,}/g, &quot; &quot;)
+    .replace(/ +([.,;:!?)])/g, &quot;$1&quot;)
+    .trim();
+}
+
+// Is this person a LearnWow member? Asks the shared LearnWow Gate.
+// Members: the gate counts the call against their monthly budget.
+// Visitors: sent as a background call, so the search never uses up one of their site-wide tries.
+async function whoIs(req, ip) {
+  const hd = req.headers || {};
+  const ctl = new AbortController(); const t = setTimeout(() =&gt; ctl.abort(), 2500);
+  try {
+    const r = await fetch(GATE_URL, {
+      method: &quot;POST&quot;, headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+      body: JSON.stringify({ pass: hd[&quot;x-lw-pass&quot;] || &quot;&quot;, vid: hd[&quot;x-lw-vid&quot;] || &quot;&quot;, act: false, ip, tool: &quot;search&quot; }),
+      signal: ctl.signal,
+    });
+    const j = await r.json();
+    if (j &amp;&amp; j.who === &quot;member&quot;) return j.ok === false ? &quot;member-budget&quot; : &quot;member&quot;;
+    return &quot;visitor&quot;;
+  } catch { return &quot;visitor&quot;; } finally { clearTimeout(t); }
+}
+
+async function askClaude(system, user) {
+  const messages = [{ role: &quot;user&quot;, content: user }];
+  let data;
+  for (let turn = 0; turn &lt; 3; turn++) {
+    const r = await fetch(&quot;https://api.anthropic.com/v1/messages&quot;, {
+      method: &quot;POST&quot;,
+      headers: {
+        &quot;x-api-key&quot;: process.env.ANTHROPIC_API_KEY,
+        &quot;anthropic-version&quot;: &quot;2023-06-01&quot;,
+        &quot;content-type&quot;: &quot;application/json&quot;,
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: 900,
+        system: [{ type: &quot;text&quot;, text: system, cache_control: { type: &quot;ephemeral&quot; } }],
+        messages,
+        tools: [{ type: &quot;web_search_20250305&quot;, name: &quot;web_search&quot;, max_uses: 1 }],
+      }),
+    });
+    data = await r.json();
+    if (!r.ok) throw new Error(data?.error?.message || `API error ${r.status}`);
+    if (data.stop_reason === &quot;pause_turn&quot;) { messages.push({ role: &quot;assistant&quot;, content: data.content }); continue; }
+    break;
+  }
+  const blocks = data.content || [];
+  let last = -1;
+  blocks.forEach((b, i) =&gt; { if (b.type === &quot;web_search_tool_result&quot;) last = i; });
+  return blocks.slice(last + 1).filter((b) =&gt; b.type === &quot;text&quot;).map((b) =&gt; b.text).join(&quot;&quot;);
+}
+
+function buildResult(text, lib, original) {
+  const s = text.indexOf(&quot;{&quot;), e = text.lastIndexOf(&quot;}&quot;);
+  let j = {};
+  if (s !== -1 &amp;&amp; e &gt; s) { try { j = JSON.parse(text.slice(s, e + 1)); } catch { j = {}; } }
+  const type = [&quot;answer&quot;, &quot;redirect&quot;, &quot;clarify&quot;].includes(j.type) ? j.type : &quot;answer&quot;;
+  const question = clean(j.question) || original;
+
+  if (type === &quot;clarify&quot;) {
+    const options = (Array.isArray(j.options) ? j.options : []).map(clean).filter((x) =&gt; x &amp;&amp; x.length &lt; 80).slice(0, 4);
+    if (clean(j.clarify) &amp;&amp; options.length &gt;= 2) return { type, question, clarify: clean(j.clarify), options };
+  }
+
+  const answer = clean(j.answer) || (s === -1 ? clean(text) : &quot;&quot;);
+  if (!answer) return null;
+
+  const listings = [];
+  const am = EXP_BY_ID[&quot;answer-man&quot;];
+  listings.push({ title: &quot;The Answer Man: Ask Mr. Paul&quot;, url: SITE + am.path, crumb: &quot;nusparklearnwow.com › the-answer-man&quot;,
+    line: &quot;Get the full answer, with history, how it works and what&#x27;s next.&quot; });
+
+  const seen = new Set([&quot;answer-man&quot;]);
+  (Array.isArray(j.tools) ? j.tools : []).forEach((t) =&gt; {
+    const x = EXP_BY_ID[t &amp;&amp; t.id];
+    if (!x || seen.has(x.id) || listings.length &gt;= 4) return;
+    seen.add(x.id);
+    listings.push({ title: x.name, url: SITE + x.path, crumb: &quot;nusparklearnwow.com › &quot; + x.path.replace(/\/$/, &quot;&quot;),
+      line: clean(t.line) || x.about });
+  });
+
+  if (lib) {
+    const used = new Set();
+    (Array.isArray(j.library) ? j.library : []).slice(0, 2).forEach((name) =&gt; {
+      const t = lib.byTitle[norm(name)];
+      if (!t || used.has(t.id)) return;
+      used.add(t.id);
+      const topic = lib.topics[t.k] || &quot;Topics&quot;;
+      listings.push({ title: t.t, url: `${LIBRARY_URL}/#/topic/${t.k}`, crumb: `Mr. Paul&#x27;s AI Library › ${topic}`,
+        line: t.d, library: true });
+    });
+  }
+  return { type, question, answer, listings };
+}
+
+// ---------- handler ----------
+export default async function handler(req, res) {
+  res.setHeader(&quot;Cache-Control&quot;, &quot;no-store&quot;);
+  if (req.method === &quot;OPTIONS&quot;) return res.status(204).end();
+  if (req.method !== &quot;POST&quot;) return res.status(405).json({ error: &quot;Method not allowed&quot; });
+  if (!originAllowed(req)) return res.status(403).json({ error: &quot;Not allowed&quot; });
+  if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: &quot;The search isn&#x27;t set up yet.&quot; });
+
+  const body = req.body || {};
+  const question = String(body.question || &quot;&quot;).trim().slice(0, 300);
+  const reply = String(body.reply || &quot;&quot;).trim().slice(0, 120);       // answer to a clarifying question
+  const asked = String(body.asked || &quot;&quot;).trim().slice(0, 200);       // the clarifying question that was asked
+  if (question.length &lt; 2) return res.status(400).json({ error: &quot;Please type a question.&quot; });
+  const full = reply ? `${question} (clarified: ${asked ? asked + &quot; — &quot; : &quot;&quot;}${reply})` : question;
+
+  const ip = clientIp(req);
+  const day = today();
+
+  // 1) Saved answers are instant and free, but still count toward a visitor&#x27;s daily searches
+  const cacheKey = `lws:v1:${norm(full)}`;
+  const cachedText = await redis([&quot;GET&quot;, cacheKey]);
+  let cached = null;
+  if (cachedText) { try { cached = JSON.parse(cachedText); } catch { cached = null; } }
+
+  // 2) Member or visitor?
+  const who = await whoIs(req, ip);
+  if (who === &quot;member-budget&quot;) {
+    res.statusCode = 402;
+    return res.json({ lwgate: &quot;budget&quot;, error: &quot;Monthly limit reached&quot; });
+  }
+  const visitor = who !== &quot;member&quot;;
+  const vid = String(req.headers[&quot;x-lw-vid&quot;] || &quot;&quot;).replace(/[^a-zA-Z0-9]/g, &quot;&quot;).slice(0, 40);
+  const ipKey = `lws:ip:${ip}:${day}`;
+  const vidKey = vid ? `lws:v:${vid}:${day}` : null;
+
+  if (visitor) {
+    const [a, b] = await Promise.all([redis([&quot;GET&quot;, ipKey]), vidKey ? redis([&quot;GET&quot;, vidKey]) : null]);
+    // shared networks (schools, offices) get a roomier limit per IP
+    if (Number(b || 0) &gt;= VISITOR_DAILY || Number(a || 0) &gt;= VISITOR_DAILY * 4) {
+      res.statusCode = 402;
+      return res.json({ lwgate: &quot;search&quot;, left: 0, error: &quot;Daily searches used&quot; });
+    }
+  }
+
+  const countIt = async (result) =&gt; {
+    if (!result || result.type === &quot;clarify&quot;) return; // clarifying questions are free
+    if (visitor) await Promise.all([bump(ipKey), vidKey ? bump(vidKey) : null]);
+  };
+
+  if (cached) { await countIt(cached); return res.status(200).json({ ...cached, cached: true }); }
+
+  // 3) Site-wide daily safety cap
+  if (Number(await redis([&quot;GET&quot;, `lws:global:${day}`]) || 0) &gt;= DAILY_GLOBAL) {
+    return res.status(429).json({ error: &quot;Learn...Wow! has answered a lot of questions today! Please come back tomorrow.&quot; });
+  }
+
+  try {
+    const lib = await library();
+    const text = await askClaude(rules(lib, !!reply), reply
+      ? `Question: ${question}\nWe asked: ${asked}\nThey answered: ${reply}\nAnswer now.`
+      : `Question: ${question}`);
+    const result = buildResult(text, lib, question);
+    if (!result) return res.status(502).json({ error: &quot;The search had trouble with that one. Please try again.&quot; });
+    await bump(`lws:global:${day}`);
+    if (result.type !== &quot;clarify&quot;) await redis([&quot;SET&quot;, cacheKey, JSON.stringify(result), &quot;EX&quot;, 86400]);
+    await countIt(result);
+    return res.status(200).json(result);
+  } catch (e) {
+    return res.status(502).json({ error: &quot;The search had trouble with that one. Please try again.&quot; });
+  }
+}
+</textarea></section><section><div class="h"><div><h2>3. vercel.json</h2><p>Upload to the main folder.</p></div><button onclick="cp('c2',this)">Copy code</button></div><textarea id="c2" readonly>{
+  &quot;functions&quot;: {
+    &quot;api/search.js&quot;: { &quot;maxDuration&quot;: 60 }
+  },
+  &quot;headers&quot;: [
+    {
+      &quot;source&quot;: &quot;/(.*)&quot;,
+      &quot;headers&quot;: [
+        {
+          &quot;key&quot;: &quot;Content-Security-Policy&quot;,
+          &quot;value&quot;: &quot;frame-ancestors &#x27;self&#x27; https://nusparklearnwow.com https://*.nusparklearnwow.com https://nusparkpublishing.com https://*.nusparkpublishing.com https://nusparkmarketing.com https://*.nusparkmarketing.com&quot;
+        }
+      ]
+    }
+  ]
+}
+</textarea></section><section><div class="h"><div><h2>4. package.json</h2><p>Upload to the main folder.</p></div><button onclick="cp('c3',this)">Copy code</button></div><textarea id="c3" readonly>{
+  &quot;name&quot;: &quot;learnwow-search&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;private&quot;: true,
+  &quot;type&quot;: &quot;module&quot;,
+  &quot;engines&quot;: { &quot;node&quot;: &quot;&gt;=18&quot; }
+}
+</textarea></section><section><div class="h"><div><h2>5. embed-code.html</h2><p>Not for GitHub. Paste this into a Divi Code module at the top of the nusparklearnwow.com homepage.</p></div><button onclick="cp('c4',this)">Copy code</button></div><textarea id="c4" readonly>&lt;!-- Learn...Wow! Search Engine — paste into a Divi Code module at the top of the homepage --&gt;
+&lt;div style=&quot;max-width:900px;margin:0 auto;&quot;&gt;
+  &lt;iframe id=&quot;lw-search&quot; src=&quot;https://learnwow-search.vercel.app/&quot; title=&quot;Learn...Wow! Search Engine&quot; style=&quot;width:100%;height:330px;border:0;display:block;border-radius:18px;&quot; loading=&quot;eager&quot;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+&lt;script&gt;
+window.addEventListener(&quot;message&quot;, function (e) {
+  if (e.origin !== &quot;https://learnwow-search.vercel.app&quot;) return;
+  var d = e.data;
+  if (d &amp;&amp; d.lwToolHeight) document.getElementById(&quot;lw-search&quot;).style.height = d.lwToolHeight + &quot;px&quot;;
+});
+&lt;/script&gt;
+</textarea></section></div>
+<script>function cp(id,b){var t=document.getElementById(id);t.select();t.setSelectionRange(0,t.value.length);var done=function(){b.textContent="Copied!";setTimeout(function(){b.textContent="Copy code"},1600)};if(navigator.clipboard){navigator.clipboard.writeText(t.value).then(done,function(){document.execCommand("copy");done()})}else{document.execCommand("copy");done()}}</script></body></html>
