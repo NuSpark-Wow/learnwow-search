@@ -277,7 +277,7 @@ function buildResult(text, lib, original) {
       if (!t || used.has(t.id)) return;
       used.add(t.id);
       const topic = lib.topics[t.k] || "Topics";
-      listings.push({ title: t.t, url: `${LIBRARY_URL}/#/topic/${t.k}`, crumb: `Mr. Paul's AI Library › ${topic}`,
+      listings.push({ title: t.t, url: `${SITE}the-ai-encyclopedias/#topic-${t.k}`, crumb: `Mr. Paul's AI Library › ${topic}`,
         line: t.d, library: true });
     });
   }
@@ -288,7 +288,7 @@ function buildResult(text, lib, original) {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method === "OPTIONS") return res.status(204).end();
-  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed", version: 5 });
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed", version: 6 });
   if (!originAllowed(req)) return res.status(403).json({ error: "Not allowed" });
   if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: "The search isn't set up yet." });
 
