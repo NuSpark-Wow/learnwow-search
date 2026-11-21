@@ -197,6 +197,7 @@ async function whoIs(req, ip) {
   } catch { return "visitor"; } finally { clearTimeout(t); }
 }
 
+let LAST_STOP = "";
 async function askClaude(system, user) {
   const messages = [{ role: "user", content: user }];
   let data;
@@ -210,7 +211,7 @@ async function askClaude(system, user) {
       },
       body: JSON.stringify({
         model: MODEL,
-        max_tokens: 900,
+        max_tokens: 2500,
         system: [{ type: "text", text: system, cache_control: { type: "ephemeral" } }],
         messages,
         tools: [{ type: "web_search_20250305", name: "web_search", max_uses: 1 }],
@@ -221,6 +222,7 @@ async function askClaude(system, user) {
     if (data.stop_reason === "pause_turn") { messages.push({ role: "assistant", content: data.content }); continue; }
     break;
   }
+  LAST_STOP = data.stop_reason || "";
   const blocks = data.content || [];
   let last = -1;
   blocks.forEach((b, i) => { if (b.type === "web_search_tool_result") last = i; });
@@ -230,8 +232,8 @@ async function askClaude(system, user) {
 function buildResult(text, lib, original) {
   const s = text.indexOf("{"), e = text.lastIndexOf("}");
   let j = {};
-  if (s !== -1 && e > s) {
-    const raw = text.slice(s, e + 1);
+  if (s !== -1) {
+    const raw = e > s ? text.slice(s, e + 1) : text.slice(s);
     try { j = JSON.parse(raw); }
     catch {
       try { j = JSON.parse(raw.replace(/[\u0000-\u001f]+/g, " ")); }
@@ -286,7 +288,7 @@ function buildResult(text, lib, original) {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method === "OPTIONS") return res.status(204).end();
-  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed", version: 3 });
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed", version: 4 });
   if (!originAllowed(req)) return res.status(403).json({ error: "Not allowed" });
   if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: "The search isn't set up yet." });
 
@@ -346,7 +348,7 @@ export default async function handler(req, res) {
     const result = buildResult(text, lib, question);
     if (!result) {
       console.error("search empty reply:", String(text).slice(0, 500));
-      return res.status(502).json({ error: "The search had trouble with that one. Please try again.", detail: "empty: " + String(text).slice(0, 300) });
+      return res.status(502).json({ error: "The search had trouble with that one. Please try again.", detail: "empty (" + LAST_STOP + "): " + String(text).slice(-300) });
     }
     await bump(`lws:global:${day}`);
     if (result.type !== "clarify") await redis(["SET", cacheKey, JSON.stringify(result), "EX", 86400]);
