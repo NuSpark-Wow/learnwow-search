@@ -288,7 +288,7 @@ function buildResult(text, lib, original) {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method === "OPTIONS") return res.status(204).end();
-  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed", version: 4 });
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed", version: 5 });
   if (!originAllowed(req)) return res.status(403).json({ error: "Not allowed" });
   if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: "The search isn't set up yet." });
 
@@ -342,10 +342,16 @@ export default async function handler(req, res) {
 
   try {
     const lib = await library();
-    const text = await askClaude(rules(lib, !!reply), reply
+    const sys = rules(lib, !!reply);
+    const userMsg = reply
       ? `Question: ${question}\nWe asked: ${asked}\nThey answered: ${reply}\nAnswer now.`
-      : `Question: ${question}`);
-    const result = buildResult(text, lib, question);
+      : `Question: ${question}`;
+    // one automatic retry if the first try fails or comes back unreadable
+    let text = "", result = null;
+    for (let attempt = 0; attempt < 2 && !result; attempt++) {
+      try { text = await askClaude(sys, userMsg); result = buildResult(text, lib, question); }
+      catch (err) { if (attempt === 1) throw err; }
+    }
     if (!result) {
       console.error("search empty reply:", String(text).slice(0, 500));
       return res.status(502).json({ error: "The search had trouble with that one. Please try again.", detail: "empty (" + LAST_STOP + "): " + String(text).slice(-300) });
