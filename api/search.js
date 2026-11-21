@@ -230,7 +230,19 @@ async function askClaude(system, user) {
 function buildResult(text, lib, original) {
   const s = text.indexOf("{"), e = text.lastIndexOf("}");
   let j = {};
-  if (s !== -1 && e > s) { try { j = JSON.parse(text.slice(s, e + 1)); } catch { j = {}; } }
+  if (s !== -1 && e > s) {
+    const raw = text.slice(s, e + 1);
+    try { j = JSON.parse(raw); }
+    catch {
+      try { j = JSON.parse(raw.replace(/[\u0000-\u001f]+/g, " ")); }
+      catch {
+        const grab = (k) => { const m = raw.match(new RegExp('"' + k + '"\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)"')); return m ? m[1].replace(/\\n/g, " ").replace(/\\"/g, '"') : ""; };
+        j = { type: grab("type"), question: grab("question"), answer: grab("answer"), clarify: grab("clarify") };
+        const ids = [...raw.matchAll(/"id"\s*:\s*"([a-z-]+)"\s*,\s*"line"\s*:\s*"((?:[^"\\]|\\.)*)"/g)].map((m) => ({ id: m[1], line: m[2] }));
+        j.tools = ids;
+      }
+    }
+  }
   const type = ["answer", "redirect", "clarify"].includes(j.type) ? j.type : "answer";
   const question = clean(j.question) || original;
 
@@ -274,7 +286,7 @@ function buildResult(text, lib, original) {
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method === "OPTIONS") return res.status(204).end();
-  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed", version: 3 });
   if (!originAllowed(req)) return res.status(403).json({ error: "Not allowed" });
   if (!process.env.ANTHROPIC_API_KEY) return res.status(500).json({ error: "The search isn't set up yet." });
 
@@ -332,12 +344,16 @@ export default async function handler(req, res) {
       ? `Question: ${question}\nWe asked: ${asked}\nThey answered: ${reply}\nAnswer now.`
       : `Question: ${question}`);
     const result = buildResult(text, lib, question);
-    if (!result) return res.status(502).json({ error: "The search had trouble with that one. Please try again." });
+    if (!result) {
+      console.error("search empty reply:", String(text).slice(0, 500));
+      return res.status(502).json({ error: "The search had trouble with that one. Please try again.", detail: "empty: " + String(text).slice(0, 300) });
+    }
     await bump(`lws:global:${day}`);
     if (result.type !== "clarify") await redis(["SET", cacheKey, JSON.stringify(result), "EX", 86400]);
     await countIt(result);
     return res.status(200).json(result);
   } catch (e) {
-    return res.status(502).json({ error: "The search had trouble with that one. Please try again." });
+    console.error("search error:", e && e.message);
+    return res.status(502).json({ error: "The search had trouble with that one. Please try again.", detail: String((e && e.message) || "").slice(0, 200) });
   }
 }
