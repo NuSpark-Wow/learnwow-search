@@ -71,6 +71,10 @@ const EXPERIENCES = [
     about: "Guessing games and mysteries, including a detective mode." },
   { id: "corner-cafe", name: "The Corner Café", path: "the-corner-cafe/",
     about: "Friendly one-on-one or roundtable chats with AI personalities, for adults 18 and up." },
+  { id: "decision-room", name: "The Decision Room", path: "the-decision-room/",
+    about: "What would you do? Real-life scenarios in 12 categories (sports, business, money, science, history, law, ethics, daily life, parenting, kids and more) or your own topic; pick an outcome, hear from AI advisors, then see what could go right and wrong." },
+  { id: "marketing-guru", name: "The Marketing Guru", path: "the-marketing-guru/",
+    about: "How marketing really works, explained by Paul Mosenson: 20 topics across tracking, advertising and media (TV, radio, social), leads and conversion, and sales and customers, for B2B or consumer businesses." },
 ];
 const EXP_BY_ID = Object.fromEntries(EXPERIENCES.map((e) => [e.id, e]));
 
