@@ -405,6 +405,13 @@ h1{font-family:var(--serif);font-weight:600;font-size:clamp(25px,4.4vw,38px);lin
 
   $("form").addEventListener("submit", e => { e.preventDefault(); $("q").blur(); run($("q").value); });
   $("ownForm").addEventListener("submit", e => { e.preventDefault(); const v = $("own").value.trim(); if (v) run(current, v); });
+  // Fresh "Try:" questions on every visit: 3 picked from a bigger list of popular questions.
+  (function(){
+    const POP = ["What is a gigabyte?","Why is the sky blue?","Who invented the telephone?","How do airplanes stay in the air?","Why do cats purr?","What causes the seasons?","How does a microwave work?","Who built the pyramids?","What is inflation?","Why do we dream?","How do vaccines work?","What makes a rainbow?","How does GPS know where I am?","Why is the ocean salty?","What was the Great Depression?","How do bees make honey?","What is a black hole?","Why do leaves change color?"];
+    const pick = POP.slice().sort(() => Math.random() - .5).slice(0, 3);
+    const box = $("examples"); if (!box) return;
+    box.innerHTML = "Try: " + pick.map(q => '<button type="button" data-q="' + q.replace(/"/g, "&quot;") + '">' + q + '</button>').join(" · ");
+  })();
   $("examples").addEventListener("click", e => { const q = e.target.getAttribute("data-q"); if (q) { $("q").value = q; run(q); } });
   document.querySelectorAll("[data-close]").forEach(b => b.onclick = () => { hideAll(); $("q").value = ""; });
   $("again").onclick = () => { hideAll(); $("q").value = ""; $("q").focus(); window.scrollTo({ top: 0, behavior: "smooth" }); };
