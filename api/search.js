@@ -83,6 +83,10 @@ const EXPERIENCES = [
     about: "How to fix, clean and maintain things around the home, with AI helpers, diagrams, safety checks and difficulty ratings." },
   { id: "marketing-guru", name: "The Marketing Guru", path: "the-marketing-guru/",
     about: "How marketing really works, explained by Paul Mosenson: 20 topics across tracking, advertising and media (TV, radio, social), leads and conversion, and sales and customers, for B2B or consumer businesses." },
+  { id: "start-to-finish", name: "Start to Finish to Start", path: "start-to-finish-process/",
+    about: "How things get made and planned, step by step: build it forward from raw materials to finished product (supply chains, manufacturing), or work backward from a finished goal to plan it. 8 or 12 steps with diagrams." },
+  { id: "just-the-facts", name: "Just the Facts", path: "just-the-facts/",
+    about: "A fun fact show: pick any topic and three radio-style hosts read 10 source-checked facts (weird, funny, mind-blowing, record-breaking, myth-busting and more), each with an explanation; jump in to ask or steer, dig deeper, print the fact sheet." },
 ];
 const EXP_BY_ID = Object.fromEntries(EXPERIENCES.map((e) => [e.id, e]));
 
